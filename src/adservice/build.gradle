@@ -103,8 +103,14 @@ task adService(type: CreateStartScripts) {
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
     defaultJvmOpts =
-            ["-Dlog4j2.contextDataInjector=io.opencensus.contrib.logcorrelation.log4j2.OpenCensusTraceContextDataInjector",
-             "-agentpath:/opt/cprof/profiler_java_agent.so=-cprof_service=adservice,-cprof_service_version=1.0.0"]
+            [
+             "-javaagent:/tmp/elastic-apm-agent-1.19.0.jar",
+             "-Djdk.tls.client.protocols=TLSv1.2", 
+             "-Delastic.apm.service_name=hipsteradservice",
+             "-Delastic.apm.application_packages=hipstershop",
+             "-Delastic.apm.secret_token=fUdDairnKQ5L6CUq8U", 
+             "-Delastic.apm.server_urls=https://e502ba7b9aac4941a32d366eb20628c0.apm.southamerica-east1.gcp.elastic-cloud.com:443"
+            ]
 }
 
 task adServiceClient(type: CreateStartScripts) {
@@ -113,8 +119,15 @@ task adServiceClient(type: CreateStartScripts) {
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
     defaultJvmOpts =
-            ["-Dlog4j2.contextDataInjector=io.opencensus.contrib.logcorrelation.log4j2.OpenCensusTraceContextDataInjector",
-             "-agentpath:/opt/cprof/profiler_java_agent.so=-cprof_service=adserviceclient,-cprof_service_version=1.0.0"]
+            [
+             "-javaagent:/tmp/elastic-apm-agent-1.19.0.jar",
+             "-Djdk.tls.client.protocols=TLSv1.2", 
+             "-Delastic.apm.service_name=hipsteradservice",
+             "-Delastic.apm.application_packages=hipstershop",
+             "-Delastic.apm.secret_token=fUdDairnKQ5L6CUq8U", 
+             "-Delastic.apm.server_urls=https://e502ba7b9aac4941a32d366eb20628c0.apm.southamerica-east1.gcp.elastic-cloud.com:443"
+            ]
+
 }
 
 applicationDistribution.into('bin') {

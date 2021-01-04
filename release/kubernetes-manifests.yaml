@@ -218,7 +218,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: gcr.io/google-samples/microservices-demo/frontend:v0.2.1
+          image: joaoemilio/hipstershop-frontend-elastic:v0.2.2
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -256,6 +256,14 @@ spec:
             value: "adservice:9555"
           - name: ENV_PLATFORM
             value: "gcp"
+          - name: ELASTIC_APM_SERVICE_NAME
+            value: "hipstershop_frontend"
+          - name: ELASTIC_APM_SERVER_URL
+            value: "https://e502ba7b9aac4941a32d366eb20628c0.apm.southamerica-east1.gcp.elastic-cloud.com:443"
+          - name: ELASTIC_APM_SECRET_TOKEN
+            value: "fUdDairnKQ5L6CUq8U"
+          - name: ELASTIC_APM_LOG_LEVEL
+            value: "debug"
           # - name: DISABLE_TRACING
           #   value: "1"
           # - name: DISABLE_PROFILER
@@ -295,6 +303,19 @@ spec:
   - name: http
     port: 80
     targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: http-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: frontend
+          servicePort: 80
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -363,12 +384,20 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: gcr.io/google-samples/microservices-demo/productcatalogservice:v0.2.1
+        image: joaoemilio/hipstershop-productcatalogservice:v0.2.2
         ports:
         - containerPort: 3550
         env:
         - name: PORT
           value: "3550"
+        - name: ELASTIC_APM_SERVICE_NAME
+          value: "hipstershop-productcatalog"
+        - name: ELASTIC_APM_SERVER_URL
+          value: "https://e502ba7b9aac4941a32d366eb20628c0.apm.southamerica-east1.gcp.elastic-cloud.com:443"
+        - name: ELASTIC_APM_SECRET_TOKEN
+          value: "fUdDairnKQ5L6CUq8U"
+        - name: ELASTIC_APM_LOG_LEVEL
+          value: "debug"
         # - name: DISABLE_STATS
         #   value: "1"
         # - name: DISABLE_TRACING
@@ -680,7 +709,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: gcr.io/google-samples/microservices-demo/adservice:v0.2.1
+        image: joaoemilio/adservice-elastic:v0.2.5
         ports:
         - containerPort: 9555
         env:

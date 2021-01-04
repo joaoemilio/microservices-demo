@@ -1,0 +1,11 @@
+{
+  "name": "todos",
+  "private": true,
+  "description": "This suite tests the examples that ship with the open source Vue.js project.",
+  "scripts": {},
+  "license": "MIT",
+  "dependencies": {
+    "@elastic/synthetics": "^0.0.1-alpha.2",
+    "playwright-core": "^1.5.2"
+  }
+}

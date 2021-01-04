@@ -33,6 +33,8 @@ import (
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/trace"
 	"google.golang.org/grpc"
+	"go.elastic.co/apm/module/apmhttp"
+
 )
 
 const (
@@ -149,9 +151,10 @@ func main() {
 	handler = &ochttp.Handler{                     // add opencensus instrumentation
 		Handler:     handler,
 		Propagation: &b3.HTTPFormat{}}
-
+	
 	log.Infof("starting server on " + addr + ":" + srvPort)
-	log.Fatal(http.ListenAndServe(addr+":"+srvPort, handler))
+	log.Info("")
+	log.Info(http.ListenAndServe(addr+":"+srvPort, apmhttp.Wrap(handler) ))
 }
 
 func initJaegerTracing(log logrus.FieldLogger) {
